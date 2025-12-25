@@ -1,4 +1,5 @@
 {
+  "homepage": "https://geekzolar.github.io/CareWatch/",
   "name": "ltc-website",
   "private": true,
   "version": "0.0.0",
@@ -6,11 +7,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "gh-pages": "^6.3.0",
     "typescript": "~5.9.3",
     "vite": "^7.1.7"
   },
