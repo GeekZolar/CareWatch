@@ -25,6 +25,27 @@ const MedicalTests: React.FC = () => {
           <p><strong>Purpose:</strong> To view bones and detect fractures, bone diseases, or other abnormalities.</p>
           <p><strong>What to Expect:</strong> Quick and painless. Your loved one will need to stay still while images are taken. Minimal radiation exposure.</p>
           <p><strong>Duration:</strong> Typically 5-10 minutes</p>
+
+          <div className="test-media">
+            <div className="test-image">
+              {/* Image served from public/assets */}
+              <img src="/assets/img/xray-machine.png" alt="X-ray machine" />
+            </div>
+
+            <div className="test-video">
+              <div className="video-wrapper">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/sAau2eyUdtk"
+                  title="X-Ray procedure overview"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="info-card">

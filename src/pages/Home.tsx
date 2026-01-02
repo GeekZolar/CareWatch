@@ -19,6 +19,7 @@ const Home: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [chatError, setChatError] = useState<string | null>(null)
+  const [lastSendWasTyped, setLastSendWasTyped] = useState(false)
 
   const quickPrompts = [
     'What services do you cover?',
@@ -107,13 +108,18 @@ const Home: React.FC = () => {
 
     const text = (promptText ?? userInput).trim()
     if (!text) return
-
     const userMessage: ChatMessage = { sender: 'user', text }
     setMessages((prev) => [...prev, userMessage])
     if (!promptText) {
       setUserInput('')
     }
+
+    // Track whether this send originated from a typed input (not a quick prompt)
+    const isTyped = !promptText
+    setLastSendWasTyped(isTyped)
+
     setIsLoading(true)
+    // clear previous error on new send
     setChatError(null)
 
     try {
@@ -122,7 +128,10 @@ const Home: React.FC = () => {
       setMessages((prev) => [...prev, { sender: 'bot', text: reply }])
     } catch (error) {
       console.error('CareChat error:', error)
-      setChatError('CareChat is temporarily unavailable. Showing a helpful guide instead.')
+      // Only show the chat error when the user typed the message (not when they clicked a quick prompt)
+      if (isTyped) {
+        setChatError('CareChat is temporarily unavailable. Showing a helpful guide instead.')
+      }
       setMessages((prev) => [...prev, { sender: 'bot', text: getBotResponse(text) }])
     } finally {
       setIsLoading(false)
@@ -279,8 +288,6 @@ const Home: React.FC = () => {
               )}
             </div>
 
-            {chatError && <p className="chatbot-error">{chatError}</p>}
-
             <div className="chatbot-quick-prompts">
               <span>Quick prompts:</span>
               <div className="prompt-buttons">
@@ -290,6 +297,11 @@ const Home: React.FC = () => {
                   </button>
                 ))}
               </div>
+              {chatError && lastSendWasTyped && (
+                <div className="chatbot-error-under-prompts" role="status" aria-live="polite">
+                  {chatError}
+                </div>
+              )}
             </div>
 
             <div className="chatbot-input">
