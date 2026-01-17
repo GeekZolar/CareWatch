@@ -7,7 +7,8 @@ const Header: React.FC = () => {
       <div className="nav-container">
         <div className="logo">
           <Link to="/">
-            <h1>LTC Education Hub</h1>
+            {/* <h1>LTC Education Hub</h1> */}
+            <span><img src="/assets/img/logo2.png" alt="LTC Education Hub" width={80} height={80}/></span>
           </Link>
         </div>
         <nav>

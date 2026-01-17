@@ -147,7 +147,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <section className="hero">
+      <section className="hero" style={{ backgroundImage: 'url(/assets/img/bgimage.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <h1>Welcome to LTC Education Hub</h1>
         <p>
           Supporting families and guardians with comprehensive, easy-to-understand

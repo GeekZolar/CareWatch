@@ -29,7 +29,7 @@ const MedicalTests: React.FC = () => {
           <div className="test-media">
             <div className="test-image">
               {/* Image served from public/assets */}
-              <img src="/assets/img/xray-machine.png" alt="X-ray machine" />
+              <img src="/assets/img/xray-machine.png" alt="X-ray machine" width={170} height={170}/>
             </div>
 
             <div className="test-video">

@@ -28,9 +28,9 @@ body {
 
 /* Header Styles */
 header {
-  background: linear-gradient(135deg, #2c6b4c 0%, #2c6b4c 100%);
+  background: linear-gradient(135deg, #2D6B44 0%, #2D6B44 100%);
   color: white;
-  padding: 1rem 0;
+  /* padding: 1rem 0; */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -141,7 +141,7 @@ footer {
 /* Hero Section */
 .hero {
   background: linear-gradient(135deg, #56b296 0%, #1eaf58 50%, #56b296 100%);
-  color: white;
+  color: #033927;
   padding: 4rem 2rem;
   text-align: center;
 }
@@ -195,7 +195,7 @@ footer {
 }
 
 .breadcrumb a {
-  color: #2563eb;
+  color: #2c6b4c;
   text-decoration: none;
 }
 
