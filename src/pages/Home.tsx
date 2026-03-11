@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { requestChatbotResponse } from '../services/chatbot'
 
@@ -20,6 +20,15 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [chatError, setChatError] = useState<string | null>(null)
   const [lastSendWasTyped, setLastSendWasTyped] = useState(false)
+  const [activeCarouselIndex, setActiveCarouselIndex] = useState(0)
+  const [carouselCardCount, setCarouselCardCount] = useState(0)
+  const carouselRef = useRef<HTMLDivElement | null>(null)
+  const carouselIndexRef = useRef(0)
+  const isDraggingRef = useRef(false)
+  const isPointerDownRef = useRef(false)
+  const hasPointerCaptureRef = useRef(false)
+  const dragStartXRef = useRef(0)
+  const scrollStartLeftRef = useRef(0)
 
   const quickPrompts = [
     'What services do you cover?',
@@ -145,17 +154,129 @@ const Home: React.FC = () => {
     }
   }
 
+  const scrollToCarouselIndex = useCallback((index: number) => {
+    const track = carouselRef.current
+    if (!track) return
+    const cards = Array.from(track.children) as HTMLElement[]
+    if (!cards.length) return
+    const clampedIndex = ((index % cards.length) + cards.length) % cards.length
+    carouselIndexRef.current = clampedIndex
+    setActiveCarouselIndex(clampedIndex)
+    track.scrollTo({ left: cards[clampedIndex].offsetLeft, behavior: 'smooth' })
+  }, [])
+
+  useEffect(() => {
+    const track = carouselRef.current
+    if (!track) return
+
+    const getCards = () => Array.from(track.children) as HTMLElement[]
+
+    const getNearestIndex = () => {
+      const cards = getCards()
+      if (!cards.length) return 0
+      let nearestIndex = 0
+      let nearestDistance = Number.POSITIVE_INFINITY
+      cards.forEach((card, index) => {
+        const distance = Math.abs(card.offsetLeft - track.scrollLeft)
+        if (distance < nearestDistance) {
+          nearestDistance = distance
+          nearestIndex = index
+        }
+      })
+      return nearestIndex
+    }
+
+    setCarouselCardCount(getCards().length)
+
+    const intervalId = window.setInterval(() => {
+      scrollToCarouselIndex(carouselIndexRef.current + 1)
+    }, 5000)
+
+    const onScroll = () => {
+      const nextIndex = getNearestIndex()
+      carouselIndexRef.current = nextIndex
+      setActiveCarouselIndex(nextIndex)
+    }
+
+    track.addEventListener('scroll', onScroll, { passive: true })
+
+    return () => {
+      window.clearInterval(intervalId)
+      track.removeEventListener('scroll', onScroll)
+    }
+  }, [scrollToCarouselIndex])
+
+  const handleCarouselPointerDown: React.PointerEventHandler<HTMLDivElement> = (event) => {
+    const track = carouselRef.current
+    if (!track) return
+    isPointerDownRef.current = true
+    isDraggingRef.current = false
+    hasPointerCaptureRef.current = false
+    dragStartXRef.current = event.clientX
+    scrollStartLeftRef.current = track.scrollLeft
+  }
+
+  const handleCarouselPointerMove: React.PointerEventHandler<HTMLDivElement> = (event) => {
+    const track = carouselRef.current
+    if (!track || !isPointerDownRef.current) return
+    const deltaX = Math.abs(event.clientX - dragStartXRef.current)
+    if (deltaX < 6 && !isDraggingRef.current) return
+    if (!isDraggingRef.current) {
+      isDraggingRef.current = true
+      track.setPointerCapture(event.pointerId)
+      hasPointerCaptureRef.current = true
+      track.style.scrollBehavior = 'auto'
+    }
+    const walk = dragStartXRef.current - event.clientX
+    track.scrollLeft = scrollStartLeftRef.current + walk
+  }
+
+  const handleCarouselPointerUp: React.PointerEventHandler<HTMLDivElement> = (event) => {
+    const track = carouselRef.current
+    if (!track) return
+    if (!isPointerDownRef.current) return
+    isPointerDownRef.current = false
+    if (!isDraggingRef.current) return
+    isDraggingRef.current = false
+    if (hasPointerCaptureRef.current) {
+      track.releasePointerCapture(event.pointerId)
+      hasPointerCaptureRef.current = false
+    }
+    track.style.scrollBehavior = 'smooth'
+    const cards = Array.from(track.children) as HTMLElement[]
+    let clampedIndex = 0
+    let nearestDistance = Number.POSITIVE_INFINITY
+    cards.forEach((card, index) => {
+      const distance = Math.abs(card.offsetLeft - track.scrollLeft)
+      if (distance < nearestDistance) {
+        nearestDistance = distance
+        clampedIndex = index
+      }
+    })
+    carouselIndexRef.current = clampedIndex
+    if (cards[clampedIndex]) {
+      track.scrollTo({ left: cards[clampedIndex].offsetLeft, behavior: 'smooth' })
+    }
+  }
+
   return (
     <div>
-      <section className="hero" style={{ backgroundImage: 'url(/assets/img/bgimage.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        <h1>Welcome to LTC Education Hub</h1>
+      <section className="hero" style={{ backgroundImage: 'url(/assets/img/bg_image1.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      {/* <div className="hero-tag">Since 2026 · Canada's LTC Navigation Platform</div> */}
+        <div className="hero-content">
+        <h1>Compassionate Long-Term Care</h1>
         <p>
-          Supporting families and guardians with comprehensive, easy-to-understand
-          information about Long-Term Care facilities and healthcare for your loved ones.
+        A home where your loved ones thrive. CareLink connects Canadian families with the information, advocacy, 
+        and support they need to navigate long-term care with confidence.
         </p>
-        <Link to="/information-hub" className="cta-button">
+        {/* <Link to="/information-hub" className="cta-button">
           Explore Resources
-        </Link>
+        </Link> */}
+        <a href="/information-hub" className="cta-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        Explore Our Platform
+      </a>
+        </div>
       </section>
 
       <div className="container content-section">
@@ -166,56 +287,135 @@ const Home: React.FC = () => {
           decisions for your family.
         </p>
 
-        <div className="card-grid">
-          <div className="topic-card">
-            <Link to="/medical-tests">
-              <h3>Medical Tests</h3>
-              <p>
-                Learn about various medical tests your loved one may undergo, including
-                imaging, diagnostic, blood, and urine tests.
-              </p>
-            </Link>
-          </div>
+        <div className="topic-carousel" aria-label="LTC topics carousel">
+          <button
+            type="button"
+            className="topic-carousel-control topic-carousel-control-prev"
+            onClick={() => scrollToCarouselIndex(activeCarouselIndex - 1)}
+            aria-label="Previous topics"
+          >
+            ‹
+          </button>
+          <div
+            className="topic-carousel-track"
+            ref={carouselRef}
+            onPointerDown={handleCarouselPointerDown}
+            onPointerMove={handleCarouselPointerMove}
+            onPointerUp={handleCarouselPointerUp}
+            onPointerLeave={handleCarouselPointerUp}
+          >
+            <div className="topic-card">
+              <Link to="/medical-tests">
+                <div
+                  className="topic-card-visual"
+                  style={{ backgroundImage: 'url(/assets/img/medical_test.png)' }}
+                  aria-hidden="true"
+                >
+                  <div className="topic-card-content">
+                    <h3>Medical Tests</h3>
+                    <p>
+                      Learn about various medical tests your loved one may undergo, including
+                      imaging, diagnostic, blood, and urine tests.
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
 
-          <div className="topic-card">
-            <Link to="/equipment">
-              <h3>Equipment</h3>
-              <p>
-                Discover common equipment used in LTC facilities to monitor and support
-                residents' health and wellbeing.
-              </p>
-            </Link>
-          </div>
+            <div className="topic-card">
+              <Link to="/equipment">
+                <div
+                  className="topic-card-visual"
+                  style={{ backgroundImage: 'url(/assets/img/medical_equipment.png)' }}
+                  aria-hidden="true"
+                >
+                  <div className="topic-card-content">
+                    <h3>Medical Equipments</h3>
+                    <p>
+                      Discover common equipment used in LTC facilities to monitor and support
+                      residents' health and wellbeing.
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
 
-          <div className="topic-card">
-            <Link to="/medical-specialists">
-              <h3>Medical Specialists</h3>
-              <p>
-                Understand the roles of different healthcare professionals involved in
-                your loved one's care journey.
-              </p>
-            </Link>
-          </div>
+            <div className="topic-card">
+              <Link to="/medical-specialists">
+                <div
+                  className="topic-card-visual"
+                  style={{ backgroundImage: 'url(/assets/img/medical_specialist.png)' }}
+                  aria-hidden="true"
+                >
+                  <div className="topic-card-content">
+                    <h3>Medical Specialists</h3>
+                    <p>
+                      Understand the roles of different healthcare professionals involved in
+                      your loved one's care journey.
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
 
-          <div className="topic-card">
-            <Link to="/accessibility-equipment">
-              <h3>Accessibility Equipment</h3>
-              <p>
-                Explore aids and devices designed to enhance mobility and independence
-                for elderly residents.
-              </p>
-            </Link>
-          </div>
+            <div className="topic-card">
+              <Link to="/accessibility-equipment">
+                <div
+                  className="topic-card-visual"
+                  style={{ backgroundImage: 'url(/assets/img/accessibility_equipments.png)' }}
+                  aria-hidden="true"
+                >
+                  <div className="topic-card-content">
+                    <h3>Accessibility Equipments</h3>
+                    <p>
+                      Explore aids and devices designed to enhance mobility and independence
+                      for elderly residents.
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
 
-          <div className="topic-card">
-            <Link to="/diet">
-              <h3>Diet & Nutrition</h3>
-              <p>
-                Find information about special diets, meal plans, and nutritional
-                guidelines for older adults.
-              </p>
-            </Link>
+            <div className="topic-card">
+              <Link to="/diet">
+                <div
+                  className="topic-card-visual"
+                  style={{ backgroundImage: 'url(/assets/img/nutrition_diets.png)' }}
+                  aria-hidden="true"
+                >
+                  <div className="topic-card-content">
+                    <h3> Diet & Nutrition</h3>
+                    <p>
+                      Find information about special diets, meal plans, and nutritional
+                      guidelines for older adults.
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
           </div>
+          <button
+            type="button"
+            className="topic-carousel-control topic-carousel-control-next"
+            onClick={() => scrollToCarouselIndex(activeCarouselIndex + 1)}
+            aria-label="Next topics"
+          >
+            ›
+          </button>
+          {carouselCardCount > 1 && (
+            <div className="topic-carousel-dots" role="tablist" aria-label="Carousel pagination">
+              {Array.from({ length: carouselCardCount }).map((_, index) => (
+                <button
+                  key={`topic-dot-${index}`}
+                  type="button"
+                  className={`topic-carousel-dot${index === activeCarouselIndex ? ' is-active' : ''}`}
+                  aria-label={`Go to slide ${index + 1}`}
+                  aria-current={index === activeCarouselIndex}
+                  onClick={() => scrollToCarouselIndex(index)}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>

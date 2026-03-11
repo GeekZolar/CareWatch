@@ -8,15 +8,15 @@ const Header: React.FC = () => {
         <div className="logo">
           <Link to="/">
             {/* <h1>LTC Education Hub</h1> */}
-            <span><img src="/assets/img/logo2.png" alt="LTC Education Hub" width={80} height={80}/></span>
+            <span><img src="/assets/img/logo3.png" alt="LTC Education Hub" /></span>
           </Link>
         </div>
         <nav>
           <ul>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/information-hub">Information Hub</Link></li>
-            <li><Link to="/contact">Contact Us</Link></li>
             <li><Link to="/about">About Us</Link></li>
+            <li><a href="/contact" className="nav-cta">Contact Us</a></li>
           </ul>
         </nav>
       </div>
