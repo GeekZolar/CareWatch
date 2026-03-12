@@ -5,11 +5,13 @@ const Equipment: React.FC = () => {
   return (
     <div>
       <div className="breadcrumb">
-        <Link to="/">Home</Link>
-        <span>&gt;</span>
-        <Link to="/information-hub">Information Hub</Link>
-        <span>&gt;</span>
-        <span>Medical Equipment</span>
+        <div className="breadcrumb-inner">
+          <Link to="/">Home</Link>
+          <span>&gt;</span>
+          <Link to="/information-hub">Information Hub</Link>
+          <span>&gt;</span>
+          <span>Medical Equipment</span>
+        </div>
       </div>
 
       <div className="container content-section">
@@ -117,7 +119,7 @@ const Equipment: React.FC = () => {
           <p><strong>Usage:</strong> Reduces staff injury risk and ensures safe, dignified transfers for residents.</p>
         </div>
 
-        <div style={{ marginTop: '3rem', padding: '1.5rem', background: '#fef3c7', borderRadius: '8px', borderLeft: '4px solid #f59e0b' }}>
+        <div style={{ marginTop: '3rem', padding: '1.5rem', background: '#f3f1eb', color: '#4f4f4f', borderRadius: '8px', borderLeft: ' 4px solid #d7591a' }}>
           <h3>Safety Reminders</h3>
           <ul>
             <li>All equipment is regularly inspected and maintained by facility staff</li>

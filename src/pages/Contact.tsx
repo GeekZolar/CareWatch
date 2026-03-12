@@ -38,9 +38,11 @@ const Contact: React.FC = () => {
   return (
     <div>
       <div className="breadcrumb">
-        <Link to="/">Home</Link>
-        <span>&gt;</span>
-        <span>Contact Us</span>
+        <div className="breadcrumb-inner">
+          <Link to="/">Home</Link>
+          <span>&gt;</span>
+          <span>Contact Us</span>
+        </div>
       </div>
 
       <div className="container content-section">
@@ -67,10 +69,10 @@ const Contact: React.FC = () => {
           <div className="info-card">
             <h3>📍 Address</h3>
             <p>
-              123 Healthcare Avenue<br />
-              Suite 456<br />
-              Care City, State 12345<br />
-              United States
+              Enactus IBU<br />
+              International Business University<br />
+              655 Bay St., Suite 200<br />
+              Toronto M5G 2K4, Canada
             </p>
           </div>
         </div>

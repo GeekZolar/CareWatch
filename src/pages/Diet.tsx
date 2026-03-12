@@ -5,11 +5,13 @@ const Diet: React.FC = () => {
   return (
     <div>
       <div className="breadcrumb">
-        <Link to="/">Home</Link>
-        <span>&gt;</span>
-        <Link to="/information-hub">Information Hub</Link>
-        <span>&gt;</span>
-        <span>Diet & Nutrition</span>
+        <div className="breadcrumb-inner">
+          <Link to="/">Home</Link>
+          <span>&gt;</span>
+          <Link to="/information-hub">Information Hub</Link>
+          <span>&gt;</span>
+          <span>Diet & Nutrition</span>
+        </div>
       </div>
 
       <div className="container content-section">

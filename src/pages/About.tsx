@@ -5,21 +5,22 @@ const About: React.FC = () => {
   return (
     <div>
       <div className="breadcrumb">
-        <Link to="/">Home</Link>
-        <span>&gt;</span>
-        <span>About Us</span>
+        <div className="breadcrumb-inner">
+          <Link to="/">Home</Link>
+          <span>&gt;</span>
+          <span>About Us</span>
+        </div>
       </div>
 
       <div className="container content-section">
-        <h2>About LTC Education Hub</h2>
+        <h2>About CareLink</h2>
         
         <div className="about-content">
           <h3>Our Mission</h3>
           <p>
-            LTC Education Hub was created to bridge the information gap for families and guardians 
-            navigating the complex world of Long-Term Care. We believe that every family deserves 
-            access to clear, compassionate, and reliable information about healthcare and caregiving 
-            for their loved ones.
+          CareLink addresses a critical, research-documented systemic gap: the complete absence of a trusted, 
+          free, centralized information and coordination mechanism connecting patients, families, 
+          caregivers, and LTC providers across Canada.
           </p>
 
           <h3>Our Purpose</h3>
@@ -65,7 +66,7 @@ const About: React.FC = () => {
 
           <h3>Our Story</h3>
           <p>
-            LTC Education Hub was born from personal experience. After navigating Long-Term Care for 
+            CareLink was born from personal experience. After navigating Long-Term Care for 
             our own family members, we realized how difficult it was to find clear, consolidated 
             information when needed most. We created this platform to ensure that no family has to 
             face the same challenge alone.
@@ -103,7 +104,7 @@ const About: React.FC = () => {
           <div style={{ marginTop: '3rem', padding: '1.5rem', background: '#eff6ff', borderRadius: '8px', borderLeft: '4px solid #2563eb' }}>
             <h3>Disclaimer</h3>
             <p>
-              The information provided on LTC Education Hub is for educational purposes only and does 
+              The information provided on CareLink is for educational purposes only and does 
               not constitute medical advice, diagnosis, or treatment. Always seek the advice of qualified 
               healthcare providers with any questions you may have regarding medical conditions or care 
               decisions. Individual circumstances may vary, and professional consultation is recommended 

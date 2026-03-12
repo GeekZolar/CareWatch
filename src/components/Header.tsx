@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Header: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev)
+  const closeMenu = () => setIsMenuOpen(false)
+
   return (
     <header>
       <div className="nav-container">
@@ -11,12 +16,24 @@ const Header: React.FC = () => {
             <span><img src="/assets/img/logo3.png" alt="LTC Education Hub" /></span>
           </Link>
         </div>
-        <nav>
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-controls="primary-navigation"
+          aria-expanded={isMenuOpen}
+          onClick={toggleMenu}
+        >
+          <span className="nav-toggle-bar" />
+          <span className="nav-toggle-bar" />
+          <span className="nav-toggle-bar" />
+          <span className="sr-only">Toggle navigation</span>
+        </button>
+        <nav id="primary-navigation" className={isMenuOpen ? 'is-open' : ''}>
           <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/information-hub">Information Hub</Link></li>
-            <li><Link to="/about">About Us</Link></li>
-            <li><Link to="/contact" className="nav-cta">Contact Us</Link></li>
+            <li><Link to="/" onClick={closeMenu}>Home</Link></li>
+            <li><Link to="/information-hub" onClick={closeMenu}>Information Hub</Link></li>
+            <li><Link to="/about" onClick={closeMenu}>About Us</Link></li>
+            <li><Link to="/contact" className="nav-cta" onClick={closeMenu}>Contact Us</Link></li>
           </ul>
         </nav>
       </div>

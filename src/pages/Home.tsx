@@ -263,16 +263,18 @@ const Home: React.FC = () => {
     <div>
       <section className="hero" style={{ backgroundImage: 'url(/assets/img/bg_image1.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* <div className="hero-tag">Since 2026 · Canada's LTC Navigation Platform</div> */}
-        <div className="hero-content">
-        <h1>Compassionate Long-Term Care</h1>
-        <p>
-        A home where your loved ones thrive. CareLink connects Canadian families with the information, advocacy, 
-        and support they need to navigate long-term care with confidence.
-        </p>
-        <Link to="/information-hub" className="cta-button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-          Explore Our Platform
-        </Link>
+        <div className="hero-inner">
+          <div className="hero-content">
+            <h1>Compassionate Long-Term Care</h1>
+            <p>
+              A home where your loved ones thrive. CareLink connects Canadian families with the information, advocacy, 
+              and support they need to navigate long-term care with confidence.
+            </p>
+            <Link to="/information-hub" className="cta-button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              Explore Our Platform
+            </Link>
+          </div>
         </div>
       </section>
 

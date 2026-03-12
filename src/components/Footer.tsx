@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="footer-right">
-          <p>© 2025 LTC Education Hub. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} CareLink. All rights reserved.</p>
           <p><a href="/privacy">Privacy Policy</a></p>
         </div>
       </div>

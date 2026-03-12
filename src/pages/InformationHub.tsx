@@ -5,9 +5,11 @@ const InformationHub: React.FC = () => {
   return (
     <div>
       <div className="breadcrumb">
-        <Link to="/">Home</Link>
-        <span>&gt;</span>
-        <span>Information Hub</span>
+        <div className="breadcrumb-inner">
+          <Link to="/">Home</Link>
+          <span>&gt;</span>
+          <span>Information Hub</span>
+        </div>
       </div>
 
       <div className="container content-section">
